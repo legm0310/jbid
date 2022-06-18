@@ -1,0 +1,108 @@
+body {
+  min-height: 100vh;
+  display: 100vh;
+  display: flex;
+  font-weight: 400;
+  font-family: "Fira Sans", sans-serif;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-logo {
+  position: fixed;
+  top: 20%;
+}
+
+.homeImg {
+  width: 100%;
+  height: 100%;
+}
+
+.admin-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 70%;
+  top: 20%;
+}
+
+.admin-card {
+  width: 90%;
+  height: 80%;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 14px 14px 14px rgba(34, 35, 58, 0.5);
+  animation: change2 2s forwards;
+  opacity: 0;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+@keyframes change2 {
+  0% {
+    bottom: -100em;
+    /* opacity: -1; */
+  }
+  50% {
+    bottom: 5%;
+  }
+
+  100% {
+    bottom: 5%;
+    opacity: 1;
+  }
+}
+
+.stdRegister-content {
+  width: 90%;
+}
+
+.admin-header {
+  width: 80%;
+  height: 20%;
+  background-color: #f8f9fa;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-content {
+  width: 80%;
+  height: 70%;
+  background-color: #f8f9fa;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+}
+
+.admin-btn {
+  width: 80%;
+  height: 20%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adminbtn {
+  border-radius: 2px;
+  border: 1px solid #d32f2f;
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+.adminbtn:hover {
+  color: #ffffff;
+}

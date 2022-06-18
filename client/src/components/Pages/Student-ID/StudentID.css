@@ -1,0 +1,156 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;700&display=swap");
+
+body {
+  min-height: 100vh;
+  display: 100vh;
+  display: flex;
+  font-weight: 400;
+  font-family: "Fira Sans", sans-serif;
+}
+
+.pages {
+  width: 100%;
+  height: 100%;
+  /* color: #316685; */
+  /* text-align: center; */
+
+  /* margin-top: 10%; */
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-logo {
+  position: fixed;
+  top: 20%;
+}
+
+.homeImg {
+  width: 100%;
+  height: 100%;
+}
+
+.stdId-container {
+  display: flex;
+  justify-content: center;
+  background-color: blue;
+}
+
+.stdId {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 70%;
+  top: 20%;
+}
+
+/* .stdId-card-1 {
+  width: 90%;
+  height: 40%;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 14px 14px 14px rgba(34, 35, 58, 0.5);
+  animation: change 2s forwards;
+  opacity: 0;
+  position: fixed;
+}
+
+@keyframes change {
+  0% {
+    top: -100em;
+  }
+  50% {
+    top: 5%;
+  }
+
+  100% {
+    top: 5%;
+    opacity: 1;
+  }
+} */
+
+.stdId-card-2 {
+  /* width: 40%;
+  height: 90%; */
+  width: 550px;
+  height: 80%;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 14px 14px 14px rgba(34, 35, 58, 0.5);
+  animation: change1 2s forwards;
+  opacity: 0;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes change1 {
+  0% {
+    bottom: -100em;
+    /* opacity: -1; */
+  }
+  50% {
+    bottom: 5%;
+  }
+
+  100% {
+    bottom: 5%;
+    opacity: 1;
+  }
+}
+
+.stdId-card-card {
+  display: flex;
+  flex-direction: column;
+  padding: 50px 0px 0px 0px;
+
+  align-items: center;
+  width: 80%;
+  height: 70%;
+  background-color: #f8f9fa;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+}
+
+.login-content {
+  display: flex;
+  width: 95%;
+}
+
+.stdRegister-content {
+  width: 90%;
+}
+
+.profileImg {
+  width: 40%;
+}
+
+.jbLogo {
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 600px) {
+  .stdId-card-2 {
+    width: 90%;
+  }
+}
+
+.registerbtn {
+  border-radius: 2px;
+  border: 1px solid #d32f2f;
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+.registerbtn:hover {
+  color: #ffffff;
+}

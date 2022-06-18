@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;700&display=swap");
+
+body {
+  min-height: 100vh;
+  display: 100vh;
+  display: flex;
+  font-weight: 400;
+  font-family: "Fira Sans", sans-serif;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-logo {
+  position: fixed;
+  top: 20%;
+}
+
+.homeImg {
+  width: 100%;
+  height: 100%;
+}
+
+.stdRegister-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 70%;
+  top: 20%;
+}
+
+.stdRegister-card {
+  width: 90%;
+  height: 80%;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 14px 14px 14px rgba(34, 35, 58, 0.5);
+  animation: change2 2s forwards;
+  opacity: 0;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes change2 {
+  0% {
+    bottom: -100em;
+    /* opacity: -1; */
+  }
+  50% {
+    bottom: 5%;
+  }
+
+  100% {
+    bottom: 5%;
+    opacity: 1;
+  }
+}
+
+.stdRegister-content {
+  width: 90%;
+}
+
+.jbLogo {
+  display: flex;
+  justify-content: center;
+}
+
+.stdIdRegister-btn {
+  display: flex;
+  flex-direction: row;
+}
+
+path {
+  color: #ffffff;
+  font-size: 50px;
+}
+
+.path:hover {
+  color: black;
+}
+.registerbtn {
+  border-radius: 2px;
+  border: 1px solid #d32f2f;
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+.registerbtn:hover {
+  color: #ffffff;
+}
+
+.registerbtn-2 {
+  border-radius: 2px;
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+.passwordbtn {
+  border-radius: 2px;
+  border: 1px solid #d32f2f;
+}
+
+.passwordbtn:hover {
+  background-color: #d32f2f;
+  color: #ffffff;
+}
