@@ -1,9 +1,10 @@
-const sdk = require('indy-sdk');
+var sdk = require('indy-sdk');
 const IndyError = require('indy-sdk/src/IndyError');
 // const sys =require('sys');
 // const colors = require('./colors')
 const utils = require('./utils')
 const log = console.log;
+const forge = require('node-forge');
 
 const poolName = utils.POOL_NAME;
 let poolHandle;
@@ -122,14 +123,20 @@ async function anonCrypt(walletName, walletKey, did, message, adminDid) {
     let verkey = await sdk.keyForDid(poolHandle, walletHandle, adminDid);
     let buffer = await sdk.cryptoAnonCrypt(verkey, Buffer.from(JSON.stringify(message), 'utf8'));
 
-    console.log(Buffer.from(buffer).toString('base64'))
-    return Buffer.from(buffer).toString('base64')
+    // console.log(Buffer.from(buffer).toString('base64'))
+
+
+    // return Buffer.from(buffer).toString('base64')
+    return buffer
   } catch (err) { throw err }
+
   finally {
     await sdk.closeWallet(walletHandle)
     await sdk.closePoolLedger(poolHandle)
   }
 };
+
+
 
 
 
@@ -184,20 +191,19 @@ async function anonDecrypt(did, message) {
   const walletHandle = await sdk.openWallet(walletConfigAdmin, walletCredentialsAdmin );
   try {
 
-
+    console.log(message);
 
     let verKey = await sdk.keyForLocalDid(walletHandle, did);
-    let uint = buffer(new Uint8Array(message, "base64"))
+    let uint8 = new Uint8Array(message.data)
+  
+    console.log("\n", verKey, uint8);
     
-    let decryptedMessageBuffer = await sdk.cryptoAnonDecrypt(walletHandle, verKey, ((uint)));
-    let buffer = Buffer.from(decryptedMessageBuffer).toString('utf8');
+    let decryptedMessageBuffer = await sdk.cryptoAnonDecrypt(walletHandle, verKey, uint8);
+
+    console.log(Buffer.from(decryptedMessageBuffer).toString())
 
 
-
-    console.log(buffer)
-
-
-    return JSON.parse(buffer);
+    return JSON.parse(decryptedMessageBuffer);
     
   } catch (err) {
     throw err

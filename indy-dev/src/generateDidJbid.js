@@ -14,7 +14,7 @@ let poolHandle;
 
 // 이규민 === sha256 ===> seed =[0, 31]
 
-async function createDidAndWriteNym(walletName, walletKey, seed) {
+async function createDidAndWriteNym(walletName, walletKey, seed, res) {
 
 
     log("Set protocol version 2 to work with Indy Node 1.12.4")
@@ -89,8 +89,9 @@ async function createDidAndWriteNym(walletName, walletKey, seed) {
         log('Trust anchor Verkey: ', trustAnchorVerkey)
 
         // 9.
-        log('\n7. Generating and storing DID and verkey representing a Client that wants to obtain Trust Anchor Verkey\n')
-        const userDidSeed = { 'seed': seed };
+      log('\n7. Generating and storing DID and verkey representing a Client that wants to obtain Trust Anchor Verkey\n')
+      let userseed = "00000000000000000STUDENT" + seed;
+        const userDidSeed = { 'seed': userseed };
         const [clientDid, clientVerkey] = await sdk.createAndStoreMyDid(walletHandle, userDidSeed)
         log('Client DID: ', clientDid)
         log('Client Verkey: ', clientVerkey)
@@ -127,18 +128,19 @@ async function createDidAndWriteNym(walletName, walletKey, seed) {
         /*request_json*/ getNymRequest)
     
         log(getNymResponse);
+        log(getNymResponse.result.state_proof.multi_signature);
 
         log('\n12. Parse Nym Response\n')
         const parse = await sdk.parseGetNymResponse(getNymResponse)
     
         log(parse)
 
-        return getNymResponse
+        return parse
 
     }
     catch (err) {
         
-        return { 'err': err }  
+        return res.json({ 'err': err })
 
     } finally {
 

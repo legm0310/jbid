@@ -1,4 +1,4 @@
-const sdk = require('indy-sdk');
+var sdk = require('indy-sdk');
 const IndyError = require('indy-sdk/src/IndyError');
 // const sys =require('sys');
 // const colors = require('./colors')
@@ -53,6 +53,7 @@ const genAttribTxn = async (walletName, walletKey, adminDid, userDid, attYear, a
     attribTxnResponse = await sdk.signAndSubmitRequest(poolHandle, walletHandle, adminDid, attribTxnRequest)
 
     log(attribTxnResponse)
+    log(attribTxnResponse.result.txn.data)
 
 
 

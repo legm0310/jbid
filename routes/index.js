@@ -108,7 +108,7 @@ router.post('/api/generateDID',auth, (req, res) => {
       return data[0].email
   })
   
-  const comparePwAndgenDID = User.findOne({ _id: req.user._id }, (err, user) => {
+  User.findOne({ _id: req.user._id }, (err, user) => {
     if (!user) {
       return res.json({
         successId: false,
@@ -124,42 +124,23 @@ router.post('/api/generateDID',auth, (req, res) => {
         });
       }
       if (isMatch) {
-        let genDID = child_process.spawnSync('python3', ['/home/ubuntu/indy-webserver-dev/indy-scripts/start_docker/generate_did.py', walletName, walletKey, stdNum]);
-        genDID;
-        console.log('stdout', genDID.stdout.toString());
 
-        try {
+        indy.generateDidJbid.createDidAndWriteNym(walletName, walletKey, stdNum).then(data => {
           let jsonData;
-          let error;
           let did, comp, compUtf8, didTimeHash;
           var sha256 = forge.md.sha256.create();
-       
-          fs.readFile(('/home/ubuntu/indy-webserver-dev/' + walletName + '_gen_did.json'), (err, data) => {  // 파일 읽기
-            if (err) {
-              throw err
-            }
-            let extractData = data.toString();
-            jsonData = JSON.parse(extractData);
-            
-            error = jsonData.error;
-        
-            if (error === 'Error') {
-              fs.unlink('/home/ubuntu/indy-webserver-dev/' + walletName + '_gen_did.json', (err) => {
-                if (err) throw err
-              })
-              return res.json({ 'msg': 'DID generate error' })
-            }
-        
-            fs.unlink('/home/ubuntu/indy-webserver-dev/' + walletName + '_gen_did.json', (err) => {
-              if (err) throw err
-            })
-        
-            did = jsonData.did;
-            comp = (String(did) + String(walletKey));
-            console.log("did:", did, "s.did+s.pw:",comp)
-            didTimeHash = sha256.update(forge.util.encodeUtf8(comp)).digest().toHex();
-            
-            var issuedData = { 'email': '', 'userKey': '', 'walletId': '', 'did': '', 'didTimeHash': '' };
+
+          if (data.err) {
+            return res.json({ 'msg': 'DID generate error' })
+          }
+          jsonData = data;
+
+          did = jsonData.did;
+          comp = (String(did) + String(walletKey));
+          console.log("did:", did, "s.did+s.pw:",comp)
+          didTimeHash = sha256.update(forge.util.encodeUtf8(comp)).digest().toHex();
+         
+          var issuedData = { 'email': '', 'userKey': '', 'walletId': '', 'did': '', 'didTimeHash': '' };
             issuedData.email = email;
             issuedData.userKey = userKey;
             issuedData.walletId = walletName;
@@ -171,21 +152,12 @@ router.post('/api/generateDID',auth, (req, res) => {
               return res.status(200).json({
                 success: true,
                 'did': did,
-                'error': error,
               });
             });
-          })
-        } catch (err) {
-          return
-        }
+        })
       }
     });
   })
-  try {
-    comparePwAndgenDID();
-  } catch (err) {
-    return 
-  }
 });
 
 
@@ -209,13 +181,11 @@ router.post('/api/verifyAndGenRecords', (req, res) => {
           if(resData) {
             studentData = resData;
             console.log(studentData);
-          }
-        })
 
-        const adminDid = req.body.did;
+            const adminDid = req.body.did;
         const stdDid = req.body.stdDid;
         // const stdDid = student.did;
-        const walletName = studentData;
+        const walletName = studentData.walletId;
         const walletKey = req.body.walletKey;
         console.log(walletName); 
 
@@ -244,12 +214,11 @@ router.post('/api/verifyAndGenRecords', (req, res) => {
                   console.log("qr에서 가져온 데이터 : H(utf8(H(utf8(s.did+s.pw))) + ts)):",hashData)
       
                   if (hashData == compHash) {
-                    indy.genAttrib.genAttribTxn(req.body.did, req.body.stdDid, req.body.attYear, req.body.attMonth, req.body.attDay)
-
-                    res.json({
-                    'msg': 'Verification success',
-                    success: true})
-
+                    indy.genAttrib.genAttribTxn(walletName, "1234567", adminDid, stdDid ,req.body.attYear, req.body.attMonth, req.body.attDay).then(data => {
+                      res.json({
+                      'msg': 'Verification success',
+                      success: true})
+                    })
                   } else {
                     res.json({
                       'msg': 'Verification failed',
@@ -264,7 +233,9 @@ router.post('/api/verifyAndGenRecords', (req, res) => {
           } else {
             return {'msg': 'error on the blockchain'}
           }
-        });
+        })
+          }
+        })
       } else {
         res.json({
           'msg': 'Verification failed',
@@ -381,6 +352,8 @@ router.get("/api/users/logout", auth, (req, res) => {
 
 
 
+
+
 router.post("/ssoServer/users/register", (req, res) => {
   var md = forge.md.sha256.create();
   var util = forge.util;
@@ -422,6 +395,7 @@ router.post("/ssoServer/users/crypto", (req, res) => {
       email: req.body.email,
       verKey: user[0].verKey,
       did: user[0].did,
+      password: req.body.password,
     };
     const utf8Base64 = forge.util.encode64(forge.util.encodeUtf8(message.name))
     const walletKey = forge.util.bytesToHex(utf8Base64)
@@ -435,8 +409,6 @@ router.post("/ssoServer/users/crypto", (req, res) => {
           messageCryptSuccess: true,
           encryptedData: encryptedData,
           userDid: message.did,
-          email : req.body.email,
-          password : req.body.password,
 
         });
       } if (err) throw err;
@@ -446,48 +418,45 @@ router.post("/ssoServer/users/crypto", (req, res) => {
 });
 
 
-
-
 router.post("/ssoServer/users/login", (req, res) => {
-  indy.verifyDid.anonDecrypt(endorserDid, req.body.data.encryptedData, (err )=> {
-    if (err) throw err
-  }).then(data => console.log(data))
+  indy.verifyDid.anonDecrypt(endorserDid, req.body.data.encryptedData).then
+    (decryptedData => {
 
-
-  BlockChainUser.findOne({ email:req.body.data.email }, (err, user) => {
-    if (!user) {
-      return res.json({
-        // data : req,
-        loginSuccess: false,
-        message: "제공된 이메일에 해당하는 유저가 없습니다.",
-      });
-    }
-    // 요청된 이메일이 데이터베이스에 있다면 비밀번호가 맞는 비밀번호 인지 확인
-    user.comparePassword(req.body.data.password, (err, isMatch) => {
-      if (!isMatch)
-        return res.json({
-          loginSuccess: false,
-          message: "비밀번호가 틀렸습니다.",
-        });
-
-        // indy.verifyDid.
-      // 비밀번호까지 맞다면 토큰을 생성
-        user.generateToken((err, user) => {
-          if (err) return res.status(400).send(err);
-
-          // 정상적일 경우 토큰을 쿠키나 로컬스토리지 등에 저장
-          // 쿠키에 저장
-          res
-          .cookie("x_auth", user.token)
-          .status(200)
-          .json({
-            loginSuccess: true,
-            userId: user._id,
-            token: user.token,
+      BlockChainUser.findOne({ email: decryptedData.email }, (err, user) => {
+        if (!user) {
+          return res.json({
+            // data : req,
+            loginSuccess: false,
+            message: "제공된 이메일에 해당하는 유저가 없습니다.",
           });
+        }
+        // 요청된 이메일이 데이터베이스에 있다면 비밀번호가 맞는 비밀번호 인지 확인
+        user.comparePassword(decryptedData.password, (err, isMatch) => {
+          if (!isMatch)
+            return res.json({
+              loginSuccess: false,
+              message: "비밀번호가 틀렸습니다.",
+            });
+    
+            // indy.verifyDid.
+          // 비밀번호까지 맞다면 토큰을 생성
+            user.generateToken((err, user) => {
+              if (err) return res.status(400).send(err);
+    
+              // 정상적일 경우 토큰을 쿠키나 로컬스토리지 등에 저장
+              // 쿠키에 저장
+              res
+              .cookie("x_auth", user.token)
+              .status(200)
+              .json({
+                loginSuccess: true,
+                userId: user._id,
+                token: user.token,
+              });
+            });
         });
-    });
-  });
+      })     
+    })
 });
 
 
