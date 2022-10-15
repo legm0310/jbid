@@ -163,7 +163,6 @@ router.post('/api/generateDID',auth, (req, res) => {
 
 
 function generateEntryRecords() {
-  
 }
 
 router.post('/api/verifyAndGenRecords', (req, res) => {
@@ -207,8 +206,6 @@ router.post('/api/verifyAndGenRecords', (req, res) => {
                   console.log("db에서 가져온 H:", compHash);
 
                   
-                  
-
                   console.log("db에서 가져온 데이터 : H(utf8(H(utf8(s.did+s.pw))) + ts)):",
                   compHash)
                   console.log("qr에서 가져온 데이터 : H(utf8(H(utf8(s.did+s.pw))) + ts)):",hashData)
@@ -329,6 +326,7 @@ router.post("/api/users/comparePw", auth, (req, res) => {
         });
 
       }
+
       if (isMatch) {
         return res.json({
           comparePwSuccess: true,
@@ -349,6 +347,10 @@ router.get("/api/users/logout", auth, (req, res) => {
   });
 });
   
+
+cookie--> db 
+
+
 
 
 
@@ -399,8 +401,6 @@ router.post("/ssoServer/users/crypto", (req, res) => {
     };
     const utf8Base64 = forge.util.encode64(forge.util.encodeUtf8(message.name))
     const walletKey = forge.util.bytesToHex(utf8Base64)
-
-
 
 
     indy.verifyDid.anonCrypt(walletName, walletKey, message.did, message, endorserDid).then(encryptedData => {
@@ -458,7 +458,6 @@ router.post("/ssoServer/users/login", (req, res) => {
       })     
     })
 });
-
 
 
 
