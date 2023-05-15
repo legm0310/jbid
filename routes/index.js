@@ -348,12 +348,6 @@ router.get("/api/users/logout", auth, (req, res) => {
 });
   
 
-cookie--> db 
-
-
-
-
-
 
 
 router.post("/ssoServer/users/register", (req, res) => {

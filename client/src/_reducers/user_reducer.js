@@ -1,6 +1,6 @@
 /* 
 (4) reducer
-: dispatch열차를 타고온 action의 type을 확인해서 그에 맞는 동작을 하는 곳
+: dispatch를 타고온 action의 type을 확인해서 그에 맞는 동작을 하는 곳
   reducer은 store의 state를 변경시켜야하기 때문에 state를 파라메터로 받고,
   dispatch를 타고온 action을 파라메터로 받아서 
   action의 type을 switch case문으로 조건을 걸어 동작

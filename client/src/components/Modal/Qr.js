@@ -24,39 +24,23 @@ const Qr = ({ setOpenModal }) => {
   let QrModal = setOpenModal;
 
   const [Seconds, setSeconds] = useState(count);
-  // const [Qr, setQr] = useState("");
 
   const time = useRef(15)
   const timerId = useRef(null);
   
-  const onQrHandler = (event) => {
-  }
 
-  const onSecHandler = (event) => {
-  }
-  
   const setQrCode = () => {
     var sha256 = forge.md.sha256.create();
     const timeStamp = Math.round(+new Date() / 1000);
     // var timeStamp = tmp;
     console.log(String(did) + String(pw));
-
-
-    
     var info = (String(did) + String(pw))
-
     sha256.update(forge.util.encodeUtf8(info))
     hashedData = sha256.digest().toHex();
-
-
     console.log("hasheddata:", hashedData);
-
-
     sha256.update(forge.util.encodeUtf8(String(hashedData) + String(timeStamp)))
     const hashedDataWithTimeStamp = sha256.digest().toHex();
-
     console.log(hashedDataWithTimeStamp);
-
     console.log("hashedDatawithTimeStamp:" ,hashedDataWithTimeStamp, " ", String(did), " ", String(timeStamp))
     qrString = (String(hashedData) + "_" + String(did) + "_" + String(timeStamp));
     qr = qrString.toString()

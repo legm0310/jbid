@@ -1,5 +1,4 @@
 // 3. app에 store 넣고, 만든 reducer 반영
-
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";

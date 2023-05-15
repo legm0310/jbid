@@ -19,7 +19,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<NewHome />} />
-
         <Route path="/studentID" element={<NewStudentID />} />
         <Route path="/stdIdRegister" element={<NewStdIdRegister />} />
         <Route path="/admin" element={<NewAdmin />} />

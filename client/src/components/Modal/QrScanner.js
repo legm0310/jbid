@@ -21,6 +21,7 @@ const QrScanner = ({ setOpenModal }) => {
   let date, year, month, day,
     hash, studentDid, timestamp,
     stringHashwithTimestamp, timeHashUtf8, timeHash;
+  
   const [qrscan, setQrscan] = useState("");
   const [Flick , setFlick] = useState(false);
   
